@@ -1,0 +1,28 @@
+version: '3'
+services:
+  admin:
+    ports:
+      - 80:80
+    depends_on:
+      - database
+    environment:
+      - APP_ENV=${APP_ENV:-prod}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_SECRET=${APP_SECRET:-secret}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:!ChangeMe!@db:5432/app?serverVersion=16.2&charset=utf8}
+    dns:
+      - 8.8.8.8
+    restart: always
+
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${POSTGRES_USER:-app}
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+volumes:
+  database_data:

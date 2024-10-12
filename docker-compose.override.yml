@@ -1,0 +1,16 @@
+version: '3'
+services:
+  database:
+    ports:
+      - "5432:5432"
+  admin:
+    environment:
+      - APP_ENV=${APP_ENV:-dev}
+      - APP_DEBUG=${APP_DEBUG:-true}
+    build:
+      context: .
+      target: admin_php
+      args:
+        PHP_VERSION: 8.2
+    extra_hosts:
+      - host.docker.internal:host-gateway
